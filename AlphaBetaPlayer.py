@@ -2,9 +2,7 @@
 import random
 import itertools
 import timeit
-from connect4 import Connect4
-
-
+import copy
 
 class SearchTimeout(Exception):
 	#An exception rasied when time out
@@ -34,7 +32,7 @@ class Player:
                 # Evaluation value
                 evaluteValue = 0
                 # First player
-                if(gameState.turn==1):
+                if gameState.turn==1 :
                     # Iterate through the board to find red and blue disc
                     for i in range(6):
                         for j in range(7):
@@ -102,7 +100,9 @@ class AlphaBetaPlayer(Player):
 				raise SearchTimeout()
 			if (gameState.detect_valid_first_row(col)) != -1 :
 				#if valid column
-				v = self.min_value(gameState.play(col),time_start, depth - 1 , alpha , beta)
+				newGameState = copy.deepcopy(gameState)
+				newGameState.play(col)
+			v = self.min_value(newGameState,time_start, depth - 1 , alpha , beta)
 			alpha = max ( alpha , v)
 			if v > best_score:
 				best_score = v
@@ -124,8 +124,9 @@ class AlphaBetaPlayer(Player):
 		for col in range(self.NOCOLUMNS):
 			if self.time_used(time_start) > self.TIMER_THRESHOLD:
 				raise SearchTimeout()
-			newgameState = gameState.play(col)
-			v = min(v,self.max_value(newgameState,time_start,depth-1,alpha,beta))
+			newGameState = copy.deepcopy(gameState)
+			newGameState.play(col)
+			v = min(v,self.max_value(newGameState,time_start,depth-1,alpha,beta))
 			if v<= alpha :
 				return v
 			beta = min (beta, v)
@@ -142,10 +143,10 @@ class AlphaBetaPlayer(Player):
 		for col in range(self.NOCOLUMNS):
 			if self.time_used(time_start) > self.TIMER_THRESHOLD:
 				raise SearchTimeout()
-			newgameState = gameState.play(col)
-			v = max(v,self.min_value(newgameState,time_start,depth-1,alpha,beta))
+			newGameState = copy.deepcopy(gameState)
+			newGameState.play(col)
+			v = max(v,self.min_value(newGameState,time_start,depth-1,alpha,beta))
 			if v>= beta:
 				return v
 			alpha = max ( alpha , v)
 		return v
-	
