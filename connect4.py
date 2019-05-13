@@ -12,6 +12,7 @@ class Connect4:
 
     def print_board(self):
         colorama.init(autoreset=True)# Automatically adds a Style.RESET_ALL after each print statement
+        print(" 0 1 2 3 4 5 6")
         for row in self.board:
             print("|",end="")
             for cell in row:
