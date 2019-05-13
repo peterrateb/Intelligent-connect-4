@@ -1,4 +1,6 @@
 import numpy as np
+import colorama
+from colorama import Fore, Back
 
 class Connect4:
     NOROWS=6
@@ -9,18 +11,15 @@ class Connect4:
         self.turn=1
 
     def print_board(self):
-        """
-        \033[0;37;48m white text
-        \033[0;31;48m red text
-        \033[0;34;48m blue text
-        """
+        colorama.init(autoreset=True)# Automatically adds a Style.RESET_ALL after each print statement
         for row in self.board:
-            print("\033[0;37;48m|",end="")
+            print("|",end="")
             for cell in row:
-                print("\033[0;31;48mO" if cell == 2 else "\033[0;34;48mO" if cell == 1 else "\033[0;37;48m ",end="")
-                print("\033[0;37;48m|",end="")
+                print( Fore.RED + "O" if cell == 2 else Fore.BLUE + "O" if cell == 1 else " ",end="")
+                print("|",end="")
             print("")
-            print("\033[0;37;48m---------------")
+            print("---------------")
+
 
     def is_valid_place(self,row_no,col_no):
         return (row_no == 6 or self.board[row_no+1] != 0) and self.board[row_no][col_no] == 0
@@ -40,6 +39,7 @@ class Connect4:
             for cell in row:
                 if cell == 0:
                     return True
+        return False
     def change_turn(self):
         if self.turn == 1:
             self.turn = 2
@@ -81,6 +81,13 @@ class Connect4:
                     j + 2] == self.turn and self.board[i - 3][j + 3] == self.turn:
                     return True
         return False
+    
+    def save(self):
+        np.savetxt("connect4.txt",self.board,delimiter=' ',fmt='%1.0f')
+
+    def load(self):
+        self.board=np.loadtxt("connect4.txt",delimiter=' ')
+        
     def game(self):
         #need to check if int and time count
         self.print_board()
@@ -98,6 +105,3 @@ class Connect4:
             print("player" + str(self.turn) + " is the winner")
         else:
             print("No one win")
-
-x=Connect4()
-x.game()
