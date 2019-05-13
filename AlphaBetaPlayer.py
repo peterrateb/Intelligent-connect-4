@@ -10,7 +10,14 @@ class SearchTimeout(Exception):
 	#An exception rasied when time out
 	pass
 
-
+evaluationTable = [
+    [3, 4, 5, 7, 5, 4, 3],
+    [4, 6, 8, 10, 8, 6, 4],
+    [5, 8, 11, 13, 11, 8, 5],
+    [5, 8, 11, 13, 11, 8, 5],
+    [4, 6, 8, 10, 8, 6, 4],
+    [3, 4, 5, 7, 5, 4, 3]
+]
 
 class Player:
 	"""Player Class
@@ -24,7 +31,37 @@ class Player:
 	def time_used(self,time_start):
 		return self.time_millisec() - time_start
 	def evaluate(self,gameState):
-		pass
+                # Evaluation value
+                evaluteValue = 0
+                # First player
+                if(gameState.turn==1):
+                    # Iterate through the board to find red and blue disc
+                    for i in range(6):
+                        for j in range(7):
+                            if (gameState.board[i][j]== 1):
+                                # add wining state
+                                evaluteValue += evaluationTable[i][j]
+                            elif (gameState.board[i][j] == 2):
+                                # add losing state
+                                evaluteValue -= evaluationTable[i][j]
+                # Second Player
+                else:
+                    for i in range(6):
+                        for j in range(7):
+                            if (gameState.board[i][j]== 2):
+                                # add wining state
+                                evaluteValue += evaluationTable[i][j]
+                            elif (gameState.board[i][j] == 1):
+                                # add losing state
+                                evaluteValue -= evaluationTable[i][j]
+                '''
+                The function returns player's winning value
+                evaluteValue = 0 : Wining state is equal for both playes
+                evaluteValue > 0 : Player has a high wining propability
+                evaluteValue < 0 : Player has a low  wining propability
+                '''
+                return evaluteValue
+
 
 
 class AlphaBetaPlayer(Player):
