@@ -39,6 +39,7 @@ class Connect4:
             for cell in row:
                 if cell == 0:
                     return True
+        return False
     def change_turn(self):
         if self.turn == 1:
             self.turn = 2
@@ -104,6 +105,3 @@ class Connect4:
             print("player" + str(self.turn) + " is the winner")
         else:
             print("No one win")
-
-x=Connect4()
-x.game()
