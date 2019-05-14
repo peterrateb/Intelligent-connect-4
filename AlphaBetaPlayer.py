@@ -36,22 +36,84 @@ class Player:
                     # Iterate through the board to find red and blue disc
                     for i in range(6):
                         for j in range(7):
-                            if (gameState.board[i][j]== 1):
+                            if gameState.board[i][j]== 1 :
                                 # add wining state
                                 evaluteValue += evaluationTable[i][j]
-                            elif (gameState.board[i][j] == 2):
+                            elif gameState.board[i][j] == 2 :
                                 # add losing state
                                 evaluteValue -= evaluationTable[i][j]
                 # Second Player
                 else:
                     for i in range(6):
                         for j in range(7):
-                            if (gameState.board[i][j]== 2):
+                            if gameState.board[i][j]== 2 :
                                 # add wining state
                                 evaluteValue += evaluationTable[i][j]
-                            elif (gameState.board[i][j] == 1):
+                            elif gameState.board[i][j] == 1 :
                                 # add losing state
                                 evaluteValue -= evaluationTable[i][j]
+                '''
+                The function returns player's winning value
+                evaluteValue = 0 : Wining state is equal for both playes
+                evaluteValue > 0 : Player has a high wining propability
+                evaluteValue < 0 : Player has a low  wining propability
+                '''
+                return evaluteValue
+	def evaluate_medium(self,gameState):
+                # Evaluation value
+                evaluteValue = 0
+                # First player
+                if gameState.turn==1 :
+                    # Iterate through the board to find red and blue disc
+                    for i in range(6):
+                        for j in range(7):
+                            if gameState.board[i][j]== 1 :
+                                # add wining state
+                                evaluteValue += evaluationTable[i][j]
+                            elif gameState.board[i][j] == 2 :
+                                # add losing state
+                                evaluteValue -= (evaluationTable[i][j])**2
+                # Second Player
+                else:
+                    for i in range(6):
+                        for j in range(7):
+                            if gameState.board[i][j]== 2 :
+                                # add wining state
+                                evaluteValue += evaluationTable[i][j]
+                            elif gameState.board[i][j] == 1:
+                                # add losing state
+                                evaluteValue -= (evaluationTable[i][j])**2
+                '''
+                The function returns player's winning value
+                evaluteValue = 0 : Wining state is equal for both playes
+                evaluteValue > 0 : Player has a high wining propability
+                evaluteValue < 0 : Player has a low  wining propability
+                '''
+                return evaluteValue
+	def evaluate_hard(self,gameState):
+                # Evaluation value
+                evaluteValue = 0
+                # First player
+                if gameState.turn==1 :
+                    # Iterate through the board to find red and blue disc
+                    for i in range(6):
+                        for j in range(7):
+                            if gameState.board[i][j]== 1 :
+                                # add wining state
+                                evaluteValue += evaluationTable[i][j]
+                            elif gameState.board[i][j] == 2 :
+                                # add losing state
+                                evaluteValue -= (evaluationTable[i][j])**3
+                # Second Player
+                else:
+                    for i in range(6):
+                        for j in range(7):
+                            if gameState.board[i][j]== 2 :
+                                # add wining state
+                                evaluteValue += evaluationTable[i][j]
+                            elif gameState.board[i][j] == 1 :
+                                # add losing state
+                                evaluteValue -= (evaluationTable[i][j])**3
                 '''
                 The function returns player's winning value
                 evaluteValue = 0 : Wining state is equal for both playes

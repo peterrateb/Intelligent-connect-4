@@ -11,7 +11,6 @@ class Connect4:
         self.turn=1
 
     def print_board(self):
-        colorama.init(autoreset=True)# Automatically adds a Style.RESET_ALL after each print statement
         print(" 0 1 2 3 4 5 6")
         for row in self.board:
             print("|",end="")
@@ -106,3 +105,8 @@ class Connect4:
             print("player" + str(self.turn) + " is the winner")
         else:
             print("No one win")
+            
+if __name__=="__main__":
+    colorama.init(autoreset=True)# Automatically adds a Style.RESET_ALL after each print statement
+    x=Connect4()
+    x.game()
