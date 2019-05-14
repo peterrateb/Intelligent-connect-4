@@ -12,28 +12,11 @@ class Server(DatagramServer):
     def handle(self, data, address):
         global received_data
         received_data =json.loads(data.decode("utf-8").replace("'", '"'))
-        print(received_data)
+        #print(received_data)
 class GameMode(Enum):
     AI = 0
     NETWORK = 1
-def getString(playerTurn,stringCode):
-    # inputString
-    if stringCode == 0:
-        if(playerTurn):
-            s="player turn, please enter a column number."
-        else:
-            s="AI turn, please wait."
-    # invalid column number
-    elif stringCode==1:
-        s="Invalid disk location please enter a valid column number"
-    # winning string
-    else:
-        if(playerTurn):
-            s="You Wins."
-        else:
-            s="AI Wins."
-    return s
-def AIMode(connect4,playerTurn):
+def AIMode(connect4,playerTurn,difficulty):
     if playerTurn == True:
         connect4.turn = 1
     else:
@@ -41,7 +24,7 @@ def AIMode(connect4,playerTurn):
     connect4.print_board()
     while connect4.is_any_place_empty():
         col_no=-1
-        AI=AlphaBetaPlayer()
+        AI=AlphaBetaPlayer(difficulty)
         if(playerTurn):
             col_no = input("Your turn, please enter a column number, or 's' to save game and exit.")
             if col_no=='s':
@@ -76,7 +59,7 @@ def AIMode(connect4,playerTurn):
             print("AI Wins.")
     else:
         print("No one win")
-def NetworkMode(connect4,ip,localPort, networkPort,ourTurn):
+def NetworkMode(connect4,ip,localPort, networkPort,ourTurn,difficulty):
     agent=networkAgent(ip, networkPort)
     server = Server(':'+str(localPort))  # creates a new server
     server.start()
@@ -87,7 +70,7 @@ def NetworkMode(connect4,ip,localPort, networkPort,ourTurn):
     connect4.print_board()
     while connect4.is_any_place_empty():
         col_no = -1
-        AI = AlphaBetaPlayer()
+        AI = AlphaBetaPlayer(difficulty)
         if (ourTurn):
             print("Our Turn.")
             col_no = AI.get_col(connect4)
@@ -123,14 +106,14 @@ def NetworkMode(connect4,ip,localPort, networkPort,ourTurn):
             print("You Lose.")
     else:
         print("No one win")
-def startGame(connect4,mode,startFirst):
+def startGame(connect4,mode,startFirst,difficulty):
     if mode==GameMode.AI:
-        AIMode(connect4, startFirst)
+        AIMode(connect4, startFirst,difficulty)
     else:
         ip=input("Please enter the ip address:")
         localPort=int(input("Please enter the local port:"))
         networkPort=int(input("Please enter the network port:"))
-        NetworkMode(connect4,ip,localPort,networkPort,startFirst)
+        NetworkMode(connect4,ip,localPort,networkPort,startFirst,difficulty)
 if __name__=="__main__":
     colorama.init(autoreset=True)  # Automatically adds a Style.RESET_ALL after each print statement
     print("Welcome to Connect 4 game")
@@ -143,6 +126,18 @@ if __name__=="__main__":
     if choosenNumber == 1:
         # New Game option
         print("Please choose option number.")
+        print("1.EASY")
+        print("2.MEDIUM")
+        print("3.HARD")
+        choosenNumber=int(input())
+        difficulty='MED'
+        if choosenNumber==1:
+            difficulty='EASY'
+        elif choosenNumber==2:
+            difficulty='MED'
+        else:
+            difficulty='HARD'
+        print("Please choose option number.")
         print("1.VS Local AI")
         print("2.VS Network AI")
         choosenNumber=int(input())
@@ -154,10 +149,10 @@ if __name__=="__main__":
             startFirst = int(input())
             if startFirst == 1:
                 startFirst=True
-                startGame(connect4, GameMode.AI,startFirst)
+                startGame(connect4, GameMode.AI,startFirst,difficulty)
             elif startFirst == 2:
                 startFirst=False
-                startGame(connect4, GameMode.AI,startFirst)
+                startGame(connect4, GameMode.AI,startFirst,difficulty)
             else:
                 print("Wrong Choice")
         elif choosenNumber == 2:
@@ -168,19 +163,31 @@ if __name__=="__main__":
             startFirst = int(input())
             if startFirst == 1:
                 startFirst = True
-                startGame(connect4, GameMode.NETWORK, startFirst)
+                startGame(connect4, GameMode.NETWORK, startFirst,difficulty)
             elif startFirst == 2:
                 startFirst = False
-                startGame(connect4, GameMode.NETWORK, startFirst)
+                startGame(connect4, GameMode.NETWORK, startFirst,difficulty)
             else:
                 print("Wrong Choice")
     elif choosenNumber == 2:
+        print("Please choose option number.")
+        print("1.EASY")
+        print("2.MEDIUM")
+        print("3.HARD")
+        choosenNumber = int(input())
+        difficulty = 'MED'
+        if choosenNumber == 1:
+            difficulty = 'EASY'
+        elif choosenNumber == 2:
+            difficulty = 'MED'
+        else:
+            difficulty = 'HARD'
         #Load a saved game
         try:
             fh = open('connect4.txt', 'r')
             # Store configuration file values
             connect4.load()
-            startGame(connect4, GameMode.AI, connect4.turn == 1)
+            startGame(connect4, GameMode.AI, connect4.turn == 1,difficulty)
         except FileNotFoundError:
             print("No game saved found.")
     else:
