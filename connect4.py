@@ -11,7 +11,7 @@ class Connect4:
         self.turn=1
 
     def print_board(self):
-        print(" 0 1 2 3 4 5 6")
+        print(" 1 2 3 4 5 6 7")
         for row in self.board:
             print("|",end="")
             for cell in row:

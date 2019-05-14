@@ -3,6 +3,7 @@ import random
 import itertools
 import timeit
 import copy
+from connect4 import Connect4
 
 class SearchTimeout(Exception):
 	#An exception rasied when time out
@@ -21,14 +22,24 @@ class Player:
 	"""Player Class
 	"""
 
-	def __init__(self, search_depth=3, timeout=3000.):
+	#def __init__(self, timeout=30000.,search_depth=3,):
+	def __init__(self, level = 'MED',search_depth=3):
 		self.search_depth = search_depth
-		self.TIMER_THRESHOLD = timeout
+		if (level == 'EASY'):
+			self.TIMER_THRESHOLD = 3000
+			self.evaluate=self.evaluate_easy
+		elif (level== 'MED'):
+			self.TIMER_THRESHOLD = 10000
+			self.evaluate=self.evaluate_medium
+		elif (level== 'HARD'):
+			self.TIMER_THRESHOLD = 30000
+			self.evaluate=self.evaluate_hard
+
 	def time_millisec(self):
 		return 1000 * timeit.default_timer()
 	def time_used(self,time_start):
 		return self.time_millisec() - time_start
-	def evaluate(self,gameState):
+	def evaluate_easy(self,gameState):
                 # Evaluation value
                 evaluteValue = 0
                 # First player
@@ -121,7 +132,6 @@ class Player:
                 evaluteValue < 0 : Player has a low  wining propability
                 '''
                 return evaluteValue
-
 
 
 class AlphaBetaPlayer(Player):
