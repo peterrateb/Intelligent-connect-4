@@ -71,7 +71,7 @@ def NetworkMode(connect4,ip,localPort, networkPort,ourTurn,difficulty):
     while connect4.is_any_place_empty():
         col_no = -1
         AI = AlphaBetaPlayer(difficulty)
-        if (ourTurn):
+        if ourTurn:
             print("Our Turn.")
             col_no = AI.get_col(connect4)
             connect4.play(col_no)
