@@ -80,18 +80,19 @@ def NetworkMode(connect4,ip,localPort, networkPort,ourTurn):
     agent=networkAgent(ip, networkPort)
     server = Server(':'+str(localPort))  # creates a new server
     server.start()
-    if ourTurn == True:
-        connect4.turn = 1
-    else:
-        connect4.turn = 2
+    # if ourTurn == True:
+    #     connect4.turn = 1
+    # else:
+    #     connect4.turn = 2
     connect4.print_board()
     while connect4.is_any_place_empty():
         col_no = -1
         AI = AlphaBetaPlayer()
         if (ourTurn):
             print("Our Turn.")
-            col_no = AI.get_col(connect4)+1
-            agent.send(connect4.board,col_no)
+            col_no = AI.get_col(connect4)
+            connect4.play(col_no)
+            agent.send(connect4.board,col_no+1)
         else:
             print("Opponent turn, please wait.")
             while 1:
@@ -101,12 +102,11 @@ def NetworkMode(connect4,ip,localPort, networkPort,ourTurn):
                     continue
                 for dict in received_data :
                     if dict['type'] == 'MV':
-                        col_no=dict['content']-1
+                        col_no=dict['content']
+                        connect4.play(col_no - 1)
                 received_data = ""
                 break
 
-        while not (connect4.play(col_no)):
-            col_no = input("Your turn, Invalid disk location please enter a valid column number")
         connect4.print_board()
         if connect4.check_winner() == True:
             if (ourTurn):
