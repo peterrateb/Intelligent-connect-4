@@ -72,7 +72,7 @@ class Player:
                                 evaluteValue += evaluationTable[i][j]
                             elif gameState.board[i][j] == 2 :
                                 # add losing state
-                                evaluteValue -= (evaluationTable[i][j])^2
+                                evaluteValue -= (evaluationTable[i][j])**2
                 # Second Player
                 else:
                     for i in range(6):
@@ -82,7 +82,7 @@ class Player:
                                 evaluteValue += evaluationTable[i][j]
                             elif gameState.board[i][j] == 1:
                                 # add losing state
-                                evaluteValue -= (evaluationTable[i][j])^2
+                                evaluteValue -= (evaluationTable[i][j])**2
                 '''
                 The function returns player's winning value
                 evaluteValue = 0 : Wining state is equal for both playes
@@ -103,7 +103,7 @@ class Player:
                                 evaluteValue += evaluationTable[i][j]
                             elif gameState.board[i][j] == 2 :
                                 # add losing state
-                                evaluteValue -= (evaluationTable[i][j])^3
+                                evaluteValue -= (evaluationTable[i][j])**3
                 # Second Player
                 else:
                     for i in range(6):
@@ -113,7 +113,7 @@ class Player:
                                 evaluteValue += evaluationTable[i][j]
                             elif gameState.board[i][j] == 1 :
                                 # add losing state
-                                evaluteValue -= (evaluationTable[i][j])^3
+                                evaluteValue -= (evaluationTable[i][j])**3
                 '''
                 The function returns player's winning value
                 evaluteValue = 0 : Wining state is equal for both playes
