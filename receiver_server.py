@@ -6,9 +6,8 @@ import json
 received_data=""
 class Server(DatagramServer):
     def handle(self, data, address):
-        #global received_data
-        received_data =json.loads(data.decode("utf-8").replace("'", '"'))
-        print(received_data)
+        global received_data
+        received_data =json.loads(data.decode())
 
 
 
