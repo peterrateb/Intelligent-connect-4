@@ -29,10 +29,10 @@ Intelligent connect 4 game using the Minimax algorithm with alpha-beta pruning.<
 5- Iterative deepening<br />
 
 ## Report
-If you need to know more see this [report](https://github.com)
+If you need to know more, download this [report](https://github.com/peterrateb/Intelligent-connect-4/raw/master/report.pdf)
 
 ## How to run
-Download our [exe](https://github.com) and just open it
+Download our [exe](https://github.com/peterrateb/Intelligent-connect-4/releases/download/v1.0/connect4.exe) and just open it
 
 ## Demo video
-Check our [demo video](https://www.youtube.com)
+Watch our [demo videos](https://www.youtube.com/playlist?list=PLURdJS3hFX2qXmEjDUecsS09diN0Brdy6)
