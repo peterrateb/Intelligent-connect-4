@@ -1,5 +1,6 @@
 from networking import send_message
 import numpy as np
+import json
 class networkAgent():
 
     def __init__(self,ip_address,port):
@@ -8,8 +9,8 @@ class networkAgent():
         self.received_data=None
 
     def send(self,board,move):
-        message=[{'type': 'MV', 'content': move}, {'type': 'BR', 'content': np.int64(board).tolist()}]
-        send_message(str(message).encode('ascii'), self.ip_address, self.port)
+        message=json.dumps([{'type': 'MV', 'content': move}, {'type': 'BR', 'content': np.int64(board).tolist()}])
+        send_message(message.encode(), self.ip_address, self.port)
 
 if __name__ == "__main__":
     y = networkAgent('127.0.0.1', 9998)
