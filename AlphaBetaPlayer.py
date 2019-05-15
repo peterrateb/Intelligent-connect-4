@@ -24,18 +24,20 @@ class Player:
     """Player Class
     """
 
-    # def __init__(self, timeout=30000.,search_depth=3,):
     def __init__(self, level='MED', search_depth=3):
         self.search_depth = search_depth
-        if (level == 'EASY'):
+        if (level == 'BEGINNER'):
             self.TIMER_THRESHOLD = 3000
-            self.evaluate = self.evaluate_easy
+            self.evaluate = self.utility1
+        elif (level == 'EASY'):
+            self.TIMER_THRESHOLD = 3000
+            self.evaluate = self.utility2
         elif (level == 'MED'):
-            self.TIMER_THRESHOLD = 10000
-            self.evaluate = self.evaluate_medium
+            self.TIMER_THRESHOLD = 15000
+            self.evaluate = self.utility2
         elif (level == 'HARD'):
             self.TIMER_THRESHOLD = 30000
-            self.evaluate = self.evaluate_hard
+            self.evaluate = self.utility2
 
     def time_millisec(self):
         return 1000 * timeit.default_timer()
@@ -43,7 +45,7 @@ class Player:
     def time_used(self, time_start):
         return self.time_millisec() - time_start
 
-    def evaluate_easy(self, gameState):
+    def utility1(self, gameState):
         # Evaluation value
         evaluteValue = 0
         # First player
@@ -140,7 +142,9 @@ class Player:
         evaluteValue < 0 : Player has a low  wining propability
         '''
         return evaluteWiningValue - (evalutelosingValue ** 2)
-
+    
+    def utility2(self,gameState):
+        pass
 
 class AlphaBetaPlayer(Player):
     """Game-playing agent that chooses a column to play
@@ -157,9 +161,9 @@ class AlphaBetaPlayer(Player):
             while (True):
                 col = self.alphabeta(gameState, time_start, depth)
                 if col is not -1:
-                	best_play = col
+                    best_play = col
                 if self.time_used(time_start) > self.TIMER_THRESHOLD:
-                	raise SearchTimeout()
+                    raise SearchTimeout()
                 #iterative deepening
                 depth+=1
         except SearchTimeout:
@@ -171,13 +175,15 @@ class AlphaBetaPlayer(Player):
         """depth-limited minimax search with alpha-beta pruning
         """
         if self.time_used(time_start) > self.TIMER_THRESHOLD:
-        	raise SearchTimeout()
+            raise SearchTimeout()
         
         best_score = float("-inf")
         best_play = None
         for col in range(self.NOCOLUMNS):
             if self.time_used(time_start) > self.TIMER_THRESHOLD:
                 raise SearchTimeout()
+            if beta <= alpha:
+                continue
             newGameState = copy.deepcopy(gameState)
             if (newGameState.detect_valid_first_row(col)) != -1 :
                 #if valid column
@@ -187,25 +193,26 @@ class AlphaBetaPlayer(Player):
                 if v > best_score:
                     best_score = v
                     best_play = col
-                if beta <= alpha:
-                    break
+                    
+    
         if best_play==None:
             return -1
+
         return best_play
-    
     
     def min_value(self,gameState,time_start,depth,alpha,beta):
         """
         return the minimum value over all legal childnodes.
         """
         v= float('Inf')
-        newGameState = copy.deepcopy(gameState)
-        newGameState.change_turn()
-        if depth==0 or not newGameState.is_any_place_empty() :
-        	return self.evaluate(newGameState)
+    
+        if depth==0 or not gameState.is_any_place_empty() or gameState.check_winner() :
+            return self.evaluate(gameState)
         for col in range(self.NOCOLUMNS):
             if self.time_used(time_start) > self.TIMER_THRESHOLD:
                 raise SearchTimeout()
+            newGameState = copy.deepcopy(gameState)
+            newGameState.change_turn()
             if (newGameState.detect_valid_first_row(col)) != -1 :
                 newGameState.play(col)
                 v = min(v,self.max_value(newGameState,time_start,depth-1,alpha,beta))
@@ -220,13 +227,14 @@ class AlphaBetaPlayer(Player):
         Return the maximum value over all legal child nodes.
         """
         v= float('-Inf')
-        newGameState = copy.deepcopy(gameState)
-        newGameState.change_turn()
-        if depth==0 or not newGameState.is_any_place_empty() :
-        	return self.evaluate(newGameState)
+    
+        if depth==0 or not gameState.is_any_place_empty() or gameState.check_winner() :
+            return self.evaluate(gameState)
         for col in range(self.NOCOLUMNS):
             if self.time_used(time_start) > self.TIMER_THRESHOLD:
                 raise SearchTimeout()
+            newGameState = copy.deepcopy(gameState)
+            newGameState.change_turn()
             if (newGameState.detect_valid_first_row(col)) != -1 :
                 newGameState.play(col)
                 v = max(v,self.min_value(newGameState,time_start,depth-1,alpha,beta))
