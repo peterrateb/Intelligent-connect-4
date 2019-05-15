@@ -84,7 +84,7 @@ class Player:
            with weights: 100 if window has 4 pieces from current player type
                          5   if window has 3 pieces from current player type and 1 empty piece
                          2   if window has 2 pieces from current player type and 2 empty piece
-                         -4  if window has 3 pieces from  player type and 1 empty piece
+                         -4  if window has 3 pieces from other   player type and 1 empty piece
         """
         score = 0
         opp_piece = 2
