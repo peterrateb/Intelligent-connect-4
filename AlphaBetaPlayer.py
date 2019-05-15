@@ -79,6 +79,13 @@ class Player:
         return evaluteValue
 
     def evaluate_window(self, window, piece):
+        """
+	   To evaluate a window of 4 elements w.r.t piece(current player value) vs opp_piece(other player value)
+           with weights: 100 if window has 4 pieces from current player type
+                         5   if window has 3 pieces from current player type and 1 empty piece
+                         2   if window has 2 pieces from current player type and 2 empty piece
+                         -4  if window has 3 pieces from  player type and 1 empty piece
+        """
         score = 0
         opp_piece = 2
         if piece == 2:
@@ -97,33 +104,40 @@ class Player:
         return score
 
     def utility2(self, gameState):
+        """
+           To evaluate the game state as it adds the summation of five kinds of score center, horizontal, vertical,positive crossed and negative crossed lines
+	   for center column it counts the pieces for the current player and multiply it by 3
+           for other cases it pass a window of 4 elements to evaluate_window function
+        """
         score = 0
         piece = gameState.turn
-        ## Score center column
+
+        # score center column
         center_array = [int(i) for i in list(gameState.board[:, 7 // 2])]
         center_count = center_array.count(piece)
         score += center_count * 3
 
-        ## Score Horizontal
+        # score horizontal
         for r in range(Connect4.NOROWS):
             row_array = [int(i) for i in list(gameState.board[r, :])]
             for c in range(Connect4.NOCOLS - 3):
                 window = row_array[c:c + 4]
                 score += self.evaluate_window(window, piece)
 
-        ## Score Vertical
+        # score vertical
         for c in range(Connect4.NOCOLS):
             col_array = [int(i) for i in list(gameState.board[:, c])]
             for r in range(Connect4.NOROWS - 3):
                 window = col_array[r:r + 4]
                 score += self.evaluate_window(window, piece)
 
-        ## Score posiive sloped diagonal
+        # score positive crossed
         for r in range(Connect4.NOROWS - 3):
             for c in range(Connect4.NOCOLS - 3):
                 window = [gameState.board[r + i][c + i] for i in range(4)]
                 score += self.evaluate_window(window, piece)
 
+        # score negative crossed
         for r in range(Connect4.NOROWS - 3):
             for c in range(Connect4.NOCOLS - 3):
                 window = [gameState.board[r + 3 - i][c + i] for i in range(4)]
